@@ -2,10 +2,10 @@ function Start-WpBrowser($Page = 1)
 {
     while(1)
     {
-        $Api = "https://SITE.COM/wp-json/wp/v2"
+        $Api = "https://ITNA.no/wp-json/wp/v2"
         Get-WpPost -Api $Api -Page $Page |
             Show-WpPostTitles -CurrPage $Page |
-                Show-WpPostContent
+                Show-WpPostContent -Page $Page
     }
 }
 
@@ -39,10 +39,12 @@ function Show-WpPostTitles()
     }
 
     Write-Host "11) Next page"
+    Write-Host "12) Previous page"
     $Selected = Read-Host -Prompt "Select"
     Clear-Host
 
     if ($Selected -eq 11) { Start-WpBrowser -Page ($CurrPage + 1) }
+    elseif ($Selected -eq 12) { Start-WpBrowser -Page ($CurrPage - 1) }
     $Titles[$Selected - 1]
 }
 
@@ -53,7 +55,8 @@ function Show-WpPostContent()
         [Parameter(
             ValueFromPipeline = $True
         )]
-        $Post
+        $Post,
+        $Page
     )
 
     Write-Host "$($Post.title.rendered)"
@@ -75,8 +78,8 @@ function Show-WpPostContent()
 
     switch ($Selected)
     {
-        "1" { Start-Process $Post.link; continue }
-        "2" { Clear-Host; continue }
+        "1" { Start-Process $Post.link; Start-WpBrowser -Page ($CurrPage + 1) }
+        "2" { Clear-Host; Start-WpBrowser -Page ($CurrPage + 1) }
     }
 }
 
