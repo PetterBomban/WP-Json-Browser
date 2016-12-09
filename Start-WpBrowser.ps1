@@ -78,9 +78,10 @@ function Show-WpPostContent()
 
     switch ($Selected)
     {
-        "1" { Start-Process $Post.link; Start-WpBrowser -Page ($CurrPage + 1) }
-        "2" { Clear-Host; Start-WpBrowser -Page ($CurrPage + 1) }
+        "1" { Start-Process $Post.link }
+        "2" { Clear-Host }
     }
+    Start-WpBrowser -Page ($CurrPage)
 }
 
 Start-WpBrowser
